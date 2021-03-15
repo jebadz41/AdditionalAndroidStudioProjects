@@ -26,10 +26,10 @@ public class AddReminder extends AppCompatActivity {
         TextView tvSched = findViewById(R.id.tvSched);
         EditText etDescription = findViewById(R.id.etDescription);
         Button btnSelect = findViewById(R.id.btnSelect),
-            btnAddReminder = findViewById(R.id.btnAddReminder);
+            btnAddReminder = findViewById(R.id.btnAddReminder),
+            btnCancel = findViewById(R.id.btnCancel);
 
         final Calendar newCalender = Calendar.getInstance();
-
 
         btnSelect.setOnClickListener(v -> {
             final Calendar newDate = Calendar.getInstance();
@@ -59,11 +59,20 @@ public class AddReminder extends AppCompatActivity {
                 Date schedule = new Date(tvSched.getText().toString().trim());
 
                 MainActivity.reminders.add(new Reminder(description,schedule));
+                Intent intent = new Intent();
+                intent.putExtra("description",description);
+                intent.putExtra("schedule",schedule.toString());
+                setResult(RESULT_OK,intent);
 
-                etDescription.setText("");
-                tvSched.setText(R.string.date_time);
                 Toast.makeText(AddReminder.this, "Reminder Successfully added!", Toast.LENGTH_SHORT).show();
+
+                AddReminder.this.finish();
             }
+        });
+
+        btnCancel.setOnClickListener( v -> {
+            setResult(RESULT_CANCELED);
+            AddReminder.this.finish();
         });
     }
 

@@ -53,7 +53,7 @@ public class ReminderDB {
             String sqlCode = "CREATE TABLE " + DATABASE_TABLE + " ("+
                     KEY_ROWID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                     KEY_DESCRPTION + " TEXT NOT NULL,"+
-                    KEY_DATE + " DATE NOT NULL);";
+                    KEY_DATE + " TEXT NOT NULL);";
 
             db.execSQL(sqlCode);
         }
@@ -72,11 +72,11 @@ public class ReminderDB {
         ourHelper.close();
     }
 
-    public long createEntry(String name, Date cell)
+    public long createEntry(String name, String cell)
     {
         ContentValues cv = new ContentValues();
         cv.put(KEY_DESCRPTION, name);
-        cv.put(KEY_DATE, String.valueOf(cell));
+        cv.put(KEY_DATE, cell);
 
         return  ourDatabase.insert(DATABASE_TABLE, null, cv);
     }
