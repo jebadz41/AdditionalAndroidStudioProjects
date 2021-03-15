@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">stripe</string>
+    <string name="Limit">Amount must be 50 above.</string>
+    <string name="price">Price: 100</string>
+    <string name="pay">Pay</string>
+    <string name="amount">Enter Amount</string>
+</resources>

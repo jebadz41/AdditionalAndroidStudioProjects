@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Reminder</string>
+    <string name="date_time">Choose date and time</string>
+</resources>
