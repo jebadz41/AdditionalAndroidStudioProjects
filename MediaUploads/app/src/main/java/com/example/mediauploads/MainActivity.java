@@ -4,13 +4,16 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.backendless.Backendless;
@@ -22,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static final int PICK_IMAGE = 1;
     ImageView ivView;
+    ProgressBar pbUpload;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         ivView = findViewById(R.id.ivView);
+        pbUpload = findViewById(R.id.pbUpload);
         Button btnPick = findViewById(R.id.btnPick),
                 btnUpload = findViewById(R.id.btnUpload);
 
@@ -45,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
         btnUpload.setOnClickListener(v -> {
             BitmapDrawable drawable = (BitmapDrawable) ivView.getDrawable();
             if(drawable != null) {
+                pbUpload.setVisibility(View.VISIBLE);
                 Bitmap photo = drawable.getBitmap();
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 builder.setTitle("Name");
@@ -55,18 +61,24 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void handleResponse(BackendlessFile response) {
                                 Toast.makeText(MainActivity.this, "Upload Success", Toast.LENGTH_SHORT).show();
+                                pbUpload.setVisibility(View.INVISIBLE);
                             }
 
                             @Override
                             public void handleFault(BackendlessFault fault) {
                                 Toast.makeText(MainActivity.this, "Upload Failed\n" + fault.getMessage(), Toast.LENGTH_SHORT).show();
+                                pbUpload.setVisibility(View.INVISIBLE);
                             }
                         }));
-                builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+                builder.setNegativeButton("Cancel", (dialog, which) -> {
+                    dialog.cancel();
+                    pbUpload.setVisibility(View.INVISIBLE);
+                });
                 builder.show();
             }
             else
                 Toast.makeText(this, "No Image to upload", Toast.LENGTH_SHORT).show();
+
         });
     }
 
@@ -78,5 +90,11 @@ public class MainActivity extends AppCompatActivity {
             ivView.setImageURI(data.getData());
         }
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+        pbUpload.setVisibility(View.INVISIBLE);
     }
 }
